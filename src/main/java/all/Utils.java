@@ -1,10 +1,10 @@
-package y2022;
+package all;
 
-import java.io.BufferedReader;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class Utils {
@@ -19,9 +19,17 @@ public class Utils {
             }
 
         } catch (IOException x) {
-            System.err.format("IOException: %s%n", x);
+            throw new AssertionError(x);
         }
 
         return lignes;
+    }
+
+    public static void writeInFile(String path, String content){
+        try (BufferedWriter writer = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8, StandardOpenOption.CREATE , StandardOpenOption.APPEND)){
+            writer.write(content);
+        } catch (IOException e){
+            throw new AssertionError(e);
+        }
     }
 }

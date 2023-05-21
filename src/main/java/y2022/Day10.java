@@ -1,5 +1,7 @@
 package y2022;
 
+import all.Utils;
+
 import java.util.ArrayList;
 
 record Instruction(int when, int addToX) implements Comparable<Instruction>{
