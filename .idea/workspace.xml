@@ -4,7 +4,11 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="a971b318-c485-45bc-bce7-6b37d52af8e1" name="Changes" comment="Day 9 part 1 and 11 part 1" />
+    <list default="true" id="a971b318-c485-45bc-bce7-6b37d52af8e1" name="Changes" comment="Day 9 part 1 and 11 part 1">
+      <change afterPath="$PROJECT_DIR$/src/main/java/y2022/Day12.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/y2023/Day2.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+    </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -61,7 +65,7 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Day1">
+  <component name="RunManager" selected="Application.Day2">
     <configuration name="Day1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="y2023.Day1" />
       <module name="AOC2022" />
@@ -81,6 +85,19 @@
       <extension name="coverage">
         <pattern>
           <option name="PATTERN" value="y2022.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="Day2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="y2023.Day2" />
+      <module name="AOC2022" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="y2023.*" />
           <option name="ENABLED" value="true" />
         </pattern>
       </extension>
@@ -116,6 +133,7 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Application.Day2" />
         <item itemvalue="Application.Day1" />
         <item itemvalue="Application.Day11" />
         <item itemvalue="Application.Day9" />
@@ -184,5 +202,21 @@
     <option name="ADD_EXTERNAL_FILES_SILENTLY" value="true" />
     <MESSAGE value="Day 9 part 1 and 11 part 1" />
     <option name="LAST_COMMIT_MESSAGE" value="Day 9 part 1 and 11 part 1" />
+  </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/y2023/Day1.java</url>
+          <line>74</line>
+          <option name="timeStamp" value="1" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/y2023/Day2.java</url>
+          <line>60</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
   </component>
 </project>
