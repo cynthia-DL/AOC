@@ -31,16 +31,6 @@ public class Day1 {
         return -1;
     }
 
-    private static boolean isParsable(char c){
-        try {
-            Integer.parseInt(Character.toString(c));
-        } catch (NumberFormatException e) {
-            return false;
-        }
-        return true;
-    }
-
-
     public static int getValue(String line){
         int start = -1;
         int end = -1;
@@ -49,7 +39,7 @@ public class Day1 {
             char c = line.charAt(i);
             int num = -1;
 
-            if (Day1.isParsable(c)){
+            if (Utils.isParsable(c)){
                num = Integer.parseInt(Character.toString(c));
             } else {
                 num = parseStringToNumber(line.toCharArray(), i);
@@ -66,8 +56,8 @@ public class Day1 {
         return start * 10 + end;
     }
     public static void main(String[] args) {
-        //var lines = Utils.listFromFile("inputs/y2023/demo.txt");
-        var lines = Utils.listFromFile("inputs/y2023/day1_input.txt");
+        var lines = Utils.listFromFile("inputs/y2023/demo.txt");
+        //var lines = Utils.listFromFile("inputs/y2023/day1_input.txt");
 
         var result = lines
                 .stream()

@@ -32,4 +32,17 @@ public class Utils {
             throw new AssertionError(e);
         }
     }
+
+    public static boolean isParsable(char c){
+       return isParsable(Character.toString(c));
+    }
+
+    public static boolean isParsable(String s){
+        try {
+            Integer.parseInt(s);
+        } catch (NumberFormatException e) {
+            return false;
+        }
+        return true;
+    }
 }
