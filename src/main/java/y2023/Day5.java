@@ -43,26 +43,27 @@ record RangeMaps(long destinationStart, long destinationEnd, long sourceStart, l
         var ranges = new ArrayList<RangeSeed>();
 
         // If seed not in range value is the same
-        if(seed.end() <= sourceStart || seed.start() >= sourceEnd){
+        if(seed.end() <= sourceStart || seed.start() > sourceEnd){
             ranges.add(new RangeSeed(seed.start(), seed.end()));
         }
 
         // if seed fully in range, apply to everyone
+        // is ok
         else if(seed.start() >= sourceStart && seed.end() <= sourceEnd){
             ranges.add(new RangeSeed(map(seed.start()), map(seed.end())));
         }
 
         // if range fully in seed, apply to a part in the center
-
-        else if (sourceStart >= seed.start() && sourceEnd <= seed.end()){
+        // [seed][range][seed]
+        else if (seed.start() < sourceStart && seed.end() > sourceEnd){
             ranges.add(new RangeSeed(seed.start(), sourceStart-1));
-            ranges.add(new RangeSeed(destinationStart, destinationEnd));
-            ranges.add(new RangeSeed(sourceEnd+1, seed.end()));
+            ranges.add(new RangeSeed(destinationStart, destinationEnd-1));
+            ranges.add(new RangeSeed(sourceEnd, seed.end()));
         }
 
         // if seed and map intersects, add multiple range to map
         // [map][seed]
-        else if(sourceStart < seed.start()){
+        else if(sourceStart <= seed.start()){
             ranges.add(new RangeSeed(map(seed.start()), destinationEnd));
             ranges.add(new RangeSeed(sourceEnd+1, seed.end()));
 
@@ -72,6 +73,8 @@ record RangeMaps(long destinationStart, long destinationEnd, long sourceStart, l
             ranges.add(new RangeSeed(seed.start(), sourceStart-1));
             ranges.add(new RangeSeed(destinationStart, map(seed.end())));
         }
+
+        System.out.println(seed+" through " + this+" => "+  (seed.end() - seed.start()) +" = "+ranges.stream().mapToLong(s -> s.end() - s.start()).sum());
 
         return ranges;
     }
@@ -145,7 +148,7 @@ public class Day5 {
 
         var seeds = Arrays.stream(lines.get(0).split(":")[1].trim().split(" ")).mapToLong(Long::parseLong).toArray();
 
-         var rangeSeed = RangeSeed.fromLine(lines.get(0));
+        var rangeSeed = RangeSeed.fromLine(lines.get(0));
 
         lines.subList(0, 2).clear();
 
@@ -155,24 +158,22 @@ public class Day5 {
             pipes.add(Pipe.fromLines(lines));
         }
 
-        long [] array_result_p1 = seeds.clone();
+        var array_result_p1 = Arrays.stream(seeds)
+                .mapToObj(s -> new RangeSeed(s, s))
+                .toList();
         
         var result_p2 = List.copyOf(rangeSeed);
 
         for (var pipe : pipes){
-            array_result_p1 = pipe.applyAll(array_result_p1);
-            /*
-            System.out.println("result_p2 = " + result_p2);
-            System.out.println("through pipe "+pipe);
-             */
+            //array_result_p1 = pipe.applyRangeSeed(array_result_p1);
             result_p2 = pipe.applyRangeSeed(result_p2);
 
         }
 
         System.out.println("result_p2 = " + result_p2);
 
-        System.out.println("result_p1 ="+Arrays.stream(array_result_p1).min());
-        System.out.println("result_p2 ="+result_p2.stream().mapToLong(RangeSeed::start).filter(s -> s != 0).min());
+        System.out.println("result_p1 ="+array_result_p1.stream().mapToLong(RangeSeed::start).min());
+        System.out.println("result_p2 ="+result_p2.stream().mapToLong(RangeSeed::start).min());
 
     }
 }
