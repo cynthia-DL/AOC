@@ -5,7 +5,9 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="a971b318-c485-45bc-bce7-6b37d52af8e1" name="Changes" comment="2023 Day 4 part 1 and 2">
-      <change beforePath="$PROJECT_DIR$/src/main/java/y2023/Day4.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/y2023/Day4.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/y2023/Day5.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/y2023/Day3.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/y2023/Day3.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -57,6 +59,8 @@
 }</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
+      <recent name="C:\Users\cdulymbois-louison\OneDrive - Solutec\ideaProjects\AOC\inputs\y2023" />
+      <recent name="C:\Users\cdulymbois-louison\OneDrive - Solutec\ideaProjects\AOC\inputs" />
       <recent name="C:\Users\cynth\Documents\git\AOC2022\inputs\2022" />
       <recent name="C:\Users\cynth\Documents\git\AOC2022\inputs" />
     </key>
@@ -64,35 +68,9 @@
       <recent name="" />
     </key>
   </component>
-  <component name="RunManager" selected="Application.Day4">
+  <component name="RunManager" selected="Application.Day5">
     <configuration name="Day1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="y2023.Day1" />
-      <module name="AOC2022" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="y2023.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Day11" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="y2022.Day11" />
-      <module name="AOC2022" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="y2022.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="Day2" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
-      <option name="MAIN_CLASS_NAME" value="y2023.Day2" />
       <module name="AOC2022" />
       <extension name="coverage">
         <pattern>
@@ -130,13 +108,39 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="Day5" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="y2023.Day5" />
+      <module name="AOC2022" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="y2023.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="y2015.Day1" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="y2015.Day1" />
+      <module name="AOC2022" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="y2015.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="Application.Day4" />
+        <item itemvalue="Application.Day5" />
         <item itemvalue="Application.Day3" />
+        <item itemvalue="Application.y2015.Day1" />
+        <item itemvalue="Application.Day4" />
         <item itemvalue="Application.Day1" />
-        <item itemvalue="Application.Day2" />
-        <item itemvalue="Application.Day11" />
       </list>
     </recent_temporary>
   </component>
@@ -204,7 +208,15 @@
       <option name="project" value="LOCAL" />
       <updated>1701700045926</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="2023 Day 4 part 1 and 2">
+      <option name="closed" value="true" />
+      <created>1701701556155</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1701701556155</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -235,6 +247,14 @@
         <breakpoint enabled="true" type="java-exception">
           <properties class="java.lang.NumberFormatException" package="java.lang" />
           <option name="timeStamp" value="10" />
+        </breakpoint>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.StringIndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="11" />
+        </breakpoint>
+        <breakpoint type="java-exception">
+          <properties class="java.lang.IndexOutOfBoundsException" package="java.lang" />
+          <option name="timeStamp" value="13" />
         </breakpoint>
       </breakpoints>
     </breakpoint-manager>

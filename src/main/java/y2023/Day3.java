@@ -103,12 +103,9 @@ record GearNumber(int line, int column, PartNumber p1, PartNumber p2){
 public class Day3 {
     public static void main(String[] args) {
 
-        var lines = Utils.listFromFile("inputs/y2023/day3_input.txt");
-        //var lines = Utils.listFromFile("inputs/y2023/demo.txt");
+        //var lines = Utils.listFromFile("inputs/y2023/day3_input.txt");
+        var lines = Utils.listFromFile("inputs/demo.txt");
 
-        for (var line : lines){
-            System.out.println(Arrays.toString(line.toCharArray()));
-        }
 
         List<PartNumber> partNumers = new ArrayList<>();
         for (int i = 0; i < lines.size(); i++){
@@ -137,14 +134,14 @@ public class Day3 {
 
         var result1_p1 = partNumers.stream()
                 .filter(partNumer -> partNumer.isValid(lines))
-                .peek(System.out::println)
+                //.peek(System.out::println)
                 .mapToInt(PartNumber::value)
                 .sum();
 
         System.out.println("result1_p1 = " + result1_p1);
         
         var result1_p2 = gears.stream()
-                .peek(System.out::println)
+                //.peek(System.out::println)
                 .mapToInt(gear -> gear.p1().value() * gear.p2().value())
                 .sum();
 
