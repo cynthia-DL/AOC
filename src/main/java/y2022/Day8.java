@@ -2,154 +2,185 @@ package y2022;
 
 import all.Utils;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
+import java.util.Objects;
 
-record MyMap(int[][] array){
-    public static MyMap fromList(ArrayList<String> input){
-        int size = input.size();
-        var array = new int[size][size];
 
-        for (int i = 0; i < size; i++){
-            var line = input.get(i);
-            for (int j = 0; j < size; j++){
-                array[i][j] = Integer.parseInt(((Character) line.charAt(j)).toString());
-            }
-        }
-        return new MyMap(array);
-    }
+record TreeMap(int[][] grid, boolean[][] visible){
 
-    public int size() {
-        return array.length;
-    }
+    private static boolean isVisible(int[][] grid, int line, int column){
+        Objects.checkIndex(line, grid.length);
+        Objects.checkIndex(column, grid[0].length);
 
-    private int getValue(int x, int y){
-        return array[x][y];
-    }
-
-    public boolean estVisible(int x, int y){
-        if (x == 0 || y == 0 ||x == size()-1 || y == size()-1) {
+        if (line == 0 || line == grid.length -1 || column == 0 || column == grid[0].length -1){
             return true;
         }
+        var currentValue = grid[line][column];
 
-        boolean cacheGauche = false;
-        boolean cacheDroite = false;
-        boolean cacheHaut = false;
-        boolean cacheBas = false;
+        boolean flag = true;
 
-        //de gauche à droite
-        for (int i = 0; i < x && !cacheGauche; i++){
-            if (getValue(i, y) >= getValue(x, y)) {
-                cacheGauche = true;
+        //check if visible from top
+        for (int i = 0; i < line; i++){
+            if (grid[i][column] >= currentValue) {
+                flag = false;
+                break;
             }
         }
 
-        //de droite à gauche
-        for (int i = size()-1; i > x && !cacheDroite; i--){
-            if (getValue(i, y) >= getValue(x, y)) {
-                cacheDroite = true;
+        if (flag) return true;
+        flag = true;
+
+        //check if visible from bottom
+        for (int i = grid.length-1; i > line; i--){
+            if (grid[i][column] >= currentValue) {
+                flag = false;
+                break;
             }
         }
 
-        //de gauche à droite
-        for (int i = 0; i < y && !cacheHaut; i++){
-            if (getValue(x, i) >= getValue(x, y)) {
-                cacheHaut = true;
+        if (flag) return true;
+        flag = true;
+
+        //check if visible from left
+        for (int i = 0; i < column; i++){
+            if (grid[line][i] >= currentValue) {
+                flag = false;
+                break;
             }
         }
 
-        //de droite à gauche
-        for (int i = size()-1; i > y && !cacheBas; i--){
-            if (getValue(x, i) >= getValue(x, y)) {
-                cacheBas = true;
+        if (flag) return true;
+        flag = true;
+
+        //check if visible from right
+        for (int i = grid[0].length-1; i > column; i--){
+            if (grid[line][i] >= currentValue) {
+                flag = false;
+                break;
             }
         }
 
-        return !(cacheGauche && cacheDroite && cacheHaut && cacheBas);
+        return flag;
+    }
+    static TreeMap fromLines(List<String> lines){
+        var lineSize = lines.size();
+        var columnSize = lines.get(0).length();
+
+        var grid = new int[lineSize][columnSize];
+        var visible = new boolean[lineSize][columnSize];
+
+        for (int i = 0; i < lines.size(); i++){
+            var line = lines.get(i);
+            for (int j = 0; j < line.length(); j++){
+                grid[i][j] = Integer.parseInt(Character.toString(line.charAt(j)));
+            }
+        }
+
+        for (int i = 0; i < grid.length; i++){
+            for (int j = 0; j < grid[i].length; j++){
+                visible[i][j] = isVisible(grid, i, j);
+            }
+        }
+
+        return new TreeMap(grid, visible);
     }
 
-    public int scenicScore(int x, int y){
-        int vueGauche = 0;
-        int vueDroite = 0;
-        int vueHaut = 0;
-        int vueBas = 0;
-        int i;
-
-        for (i = x-1; i > 0 ; i--){
-            if(getValue(i, y) < getValue(x, y)){
-                vueGauche++;
-            } else {
-                i = -1;
+    int countVisible(){
+        int count = 0;
+        for (var line : visible){
+            for (var cel : line){
+                count += cel ? 1 : 0;
             }
         }
 
-        for (i = x+1; i < size(); i++){
-            if(getValue(i, y) < getValue(x, y)) {
-                vueDroite++;
-            } else {
-                i = size();
-            }
-        }
-
-        for (i = y-1; i > 0; i--){
-            if(getValue(x, i) < getValue(x, y)){
-                vueHaut++;
-            } else {
-                i = -1;
-            }
-        }
-
-        for (i = y+1; i < size(); i++){
-            if(getValue(x, i) < getValue(x, y)){
-                vueBas++;
-            } else {
-                i = size();
-            }
-        }
-        System.out.println(vueGauche+" * "+vueDroite+" * "+vueHaut+" * "+vueBas);
-        return vueGauche * vueDroite * vueHaut * vueBas;
+        return count;
     }
 
-    public String toString(){
-        StringBuilder str = new StringBuilder();
-        for (int i = 0; i < size(); i++) {
-            for (int j = 0; j < size(); j++) {
-                str.append(getValue(i, j));
-            }
-            str.append("\n");
+    @Override
+    public String toString() {
+        final StringBuilder sb = new StringBuilder();
+
+        for (var line : visible){
+            sb.append(Arrays.toString(line)).append('\n');
         }
 
-        return str.toString();
+        return sb.toString();
+    }
+
+    int bestScenicScore(){
+        int scenicScore = 1;
+        for (int line = 0; line < grid.length; line++){
+            for (int column = 0; column < grid[line].length; column++){
+                if(visible[line][column]){
+                    int currentValue = grid[line][column];
+                    int currentScore = 1;
+                    int toAdd = 0;
+
+                    //check if visible from top
+                    for (int i = 0; i < line; i++){
+                        if (grid[line-i][column] >= currentValue) {
+                            break;
+                        }
+                        toAdd++;
+                    }
+
+                    currentScore *= toAdd;
+                    toAdd =0;
+
+                    //check if visible from bottom
+                    for (int i = grid.length-1; i > line; i--){
+                        if (grid[line+i][column] >= currentValue) {
+                            break;
+                        }
+                        toAdd++;
+                    }
+
+                    currentScore *= toAdd;
+                    toAdd =0;
+
+                    //check if visible from left
+                    for (int i = 0; i < column; i++){
+                        if (grid[line][column-i] >= currentValue) {
+                            break;
+                        }
+                        toAdd++;
+                    }
+
+                    currentScore *= toAdd;
+                    toAdd =0;
+
+                    //check if visible from right
+                    for (int i = grid[0].length-1; i > column; i--){
+                        if (grid[line][column+i] >= currentValue) {
+                            break;
+                        }
+                        toAdd++;
+                    }
+
+                    currentScore *= toAdd;
+                    scenicScore = Math.max(scenicScore, currentScore);
+                    
+                }
+            }
+        }
+
+        return scenicScore;
     }
 }
-
 public class Day8 {
     public static void main(String[] args) {
-        var lignes = Utils.listFromFile("./inputs/2022/day8_input.txt");
-        var map = MyMap.fromList(lignes);
+        var lines = Utils.listFromFile("inputs/demo.txt");
+        //var lines = Utils.listFromFile("inputs/y2022/day8_input.txt");
 
-        int cmp = 0;
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.size(); j++) {
-                cmp += map.estVisible(i, j) ? 1 : 0;
-            }
-        }
+        var treeMap = TreeMap.fromLines(lines);
 
-        System.out.println("cmp = " + cmp);
+        //System.out.println(treeMap);
 
-        int bestView = 0;
-        for (int i = 0; i < map.size(); i++) {
-            for (int j = 0; j < map.size(); j++) {
-                bestView = Math.max(bestView, map.scenicScore(i, j));
-            }
-        }
-
-        System.out.println("bestView = " + bestView);
-
+        var result_p1 = treeMap.countVisible();
+        var result_p2 = treeMap.bestScenicScore();
+        
+        System.out.println("result_p1 = " + result_p1);
+        System.out.println("result_p2 = " + result_p2);
     }
 }
