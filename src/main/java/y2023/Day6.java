@@ -57,7 +57,7 @@ record Race(long time, long distance){
         return ways;
     }
 }
-public class Day6 {;
+public class Day6 {
 
     public static void main(String[] args) {
         var lines = Utils.listFromFile("inputs/y2023/day6_input.txt");
