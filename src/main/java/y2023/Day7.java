@@ -213,7 +213,6 @@ record PlayerP2(List<CardP2> hand, long bid) implements Comparable<PlayerP2> {
                             List<CardP2> listCard5 = hand.get(4) == CardP2.JOKER ? List.of(CardP2.values()) : List.of(hand.get(4));
                             for (var card5 : listCard5) {
                                 var tmpHand = List.of(card1, card2, card3, card4, card5);
-                                // TODO Finir méthode
                                 var currentHandType = handType(tmpHand, Frequency.fromHand(tmpHand));
 
                                 if (currentHandType.compareTo(bestHandType) < 0) bestHandType = currentHandType;
