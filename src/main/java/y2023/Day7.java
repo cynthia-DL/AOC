@@ -5,25 +5,19 @@ import all.Utils;
 import java.util.*;
 
 enum Card{
-    ACE(14, 'A'), KING(13, 'K'),
-    QUEEN(12, 'Q'), JACK(11, 'J'),
-    TEN(11, 'T'), NINE(9, '9'),
-    EIGHT(8, '8'), SEVEN(7, '7'),
-    SIX(6, '6'), FIVE(5, '5'),
-    FOUR(4, '4'), THREE(3, '3'),
-    TWO (2, '2');
+    ACE( 'A'), KING('K'),
+    QUEEN('Q'), JACK('J'),
+    TEN('T'), NINE('9'),
+    EIGHT('8'), SEVEN('7'),
+    SIX('6'), FIVE('5'),
+    FOUR('4'), THREE('3'),
+    TWO ('2');
 
 
-    private final int strength;
     private final char symbol;
 
-    Card(int strength, char symbol){
-        this.strength = strength;
+    Card(char symbol){
         this.symbol = symbol;
-    }
-
-    public int strength() {
-        return strength;
     }
 
     static Card fromSymbol(char symbol){
