@@ -6,27 +6,27 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-record RangeSeed (long start, long end){
-    static List<RangeSeed> fromLine(String line){
+record Seed(long start, long end){
+    static List<Seed> fromLine(String line){
         var seeds = Arrays.stream(line.split(":")[1].trim().split(" ")).mapToLong(Long::parseLong).toArray();
 
-        List<RangeSeed> ranges  = new ArrayList<>();
+        List<Seed> ranges  = new ArrayList<>();
 
 
         for (int i = 0; i < seeds.length; i+=2){
-            ranges.add(new RangeSeed(seeds[i], seeds[i]+seeds[i+1]-1));
+            ranges.add(new Seed(seeds[i], seeds[i]+seeds[i+1]-1));
         }
 
         return ranges;
     }
 }
-record RangeMaps(long destinationStart, long destinationEnd, long sourceStart, long sourceEnd){
-    static RangeMaps fromLine(String line){
+record Mapper(long destinationStart, long destinationEnd, long sourceStart, long sourceEnd){
+    static Mapper fromLine(String line){
         var array = line.replace("  ", " ").split(" ");
         long dest = Long.parseLong(array[0]);
         long source = Long.parseLong(array[1]);
         long length = Long.parseLong(array[2]);
-        return new RangeMaps(dest, dest+length, source, source+length);
+        return new Mapper(dest, dest+length, source, source+length);
     }
 
     private long map(long source){
@@ -39,55 +39,55 @@ record RangeMaps(long destinationStart, long destinationEnd, long sourceStart, l
         return source;
     }
 
-    List<RangeSeed> passThrough(RangeSeed seed){
-        var ranges = new ArrayList<RangeSeed>();
+    List<Seed> passThrough(Seed seed){
+        var ranges = new ArrayList<Seed>();
 
         // If seed not in range value is the same
-        if(seed.end() <= sourceStart || seed.start() > sourceEnd){
-            ranges.add(new RangeSeed(seed.start(), seed.end()));
+        if(seed.end() <= sourceStart || seed.start() >= sourceEnd){
+            ranges.add(new Seed(seed.start(), seed.end()));
         }
 
         // if seed fully in range, apply to everyone
         // is ok
         else if(seed.start() >= sourceStart && seed.end() <= sourceEnd){
-            ranges.add(new RangeSeed(map(seed.start()), map(seed.end())));
+            ranges.add(new Seed(map(seed.start()), map(seed.end())));
         }
 
         // if range fully in seed, apply to a part in the center
         // [seed][range][seed]
-        else if (seed.start() < sourceStart && seed.end() > sourceEnd){
-            ranges.add(new RangeSeed(seed.start(), sourceStart-1));
-            ranges.add(new RangeSeed(destinationStart, destinationEnd-1));
-            ranges.add(new RangeSeed(sourceEnd, seed.end()));
+        else if (seed.start() <= sourceStart && seed.end() >= sourceEnd){
+            ranges.add(new Seed(seed.start(), sourceStart));
+            ranges.add(new Seed(destinationStart, destinationEnd));
+            ranges.add(new Seed(sourceEnd, seed.end()));
         }
 
         // if seed and map intersects, add multiple range to map
         // [map][seed]
         else if(sourceStart <= seed.start()){
-            ranges.add(new RangeSeed(map(seed.start()), destinationEnd));
-            ranges.add(new RangeSeed(sourceEnd+1, seed.end()));
+            ranges.add(new Seed(map(seed.start()), destinationEnd));
+            ranges.add(new Seed(sourceEnd+1, seed.end()));
 
         }
         // if [seed][map]
         else {
-            ranges.add(new RangeSeed(seed.start(), sourceStart-1));
-            ranges.add(new RangeSeed(destinationStart, map(seed.end())));
+            ranges.add(new Seed(seed.start(), sourceStart));
+            ranges.add(new Seed(destinationStart, map(seed.end())));
         }
 
-        System.out.println(seed+" through " + this+" => "+  (seed.end() - seed.start()) +" = "+ranges.stream().mapToLong(s -> s.end() - s.start()).sum());
+        System.out.println("\t\t"+seed+" => "+ ranges);
 
         return ranges;
     }
 }
-record Pipe(ArrayList<RangeMaps> ranges){
+record Pipe(ArrayList<Mapper> ranges){
     static Pipe fromLines(List<String> lines){
-        var ranges = new ArrayList<RangeMaps>();
+        var ranges = new ArrayList<Mapper>();
 
         lines.remove(0);
         
         String line = lines.remove(0);
         while (!line.isEmpty()){
-            ranges.add(RangeMaps.fromLine(line));
+            ranges.add(Mapper.fromLine(line));
             if (!lines.isEmpty())
                 line = lines.remove(0);
             else
@@ -112,18 +112,21 @@ record Pipe(ArrayList<RangeMaps> ranges){
         return Arrays.stream(sources).map(this::apply).toArray();
     }
 
-    List<RangeSeed> applyRangeSeed(List<RangeSeed> seeds){
-        ArrayList<RangeSeed> computedRanges = new ArrayList<>(List.copyOf(seeds));
+    List<Seed> applyRangeSeed(List<Seed> seeds){
+        var currentSeeds = List.copyOf(seeds);
+        ArrayList<Seed> computedSeeds = new ArrayList<>();
 
         for (var range: ranges){
-            var lookout = List.copyOf(computedRanges);
-            computedRanges = new ArrayList<>();
-            for (var seed : lookout){
-                computedRanges.addAll(range.passThrough(seed));
+            System.out.println("\trange = " + range);
+            for (var seed : currentSeeds){
+                computedSeeds.addAll(range.passThrough(seed));
             }
+
+            currentSeeds = computedSeeds;
+            computedSeeds = new ArrayList<>();
         }
 
-        return computedRanges;
+        return currentSeeds;
     }
 
 
@@ -148,7 +151,7 @@ public class Day5 {
 
         var seeds = Arrays.stream(lines.get(0).split(":")[1].trim().split(" ")).mapToLong(Long::parseLong).toArray();
 
-        var rangeSeed = RangeSeed.fromLine(lines.get(0));
+        var rangeSeed = Seed.fromLine(lines.get(0));
 
         lines.subList(0, 2).clear();
 
@@ -159,21 +162,22 @@ public class Day5 {
         }
 
         var array_result_p1 = Arrays.stream(seeds)
-                .mapToObj(s -> new RangeSeed(s, s))
+                .mapToObj(s -> new Seed(s, s+1))
                 .toList();
         
-        var result_p2 = List.copyOf(rangeSeed);
+        //var result_p2 = List.copyOf(rangeSeed);
 
         for (var pipe : pipes){
-            //array_result_p1 = pipe.applyRangeSeed(array_result_p1);
-            result_p2 = pipe.applyRangeSeed(result_p2);
+            System.out.println("pipe = " + pipe);
+            array_result_p1 = pipe.applyRangeSeed(array_result_p1);
+            System.out.println("array_result_p1 = " + array_result_p1);
+            System.out.println("*************************");
+            //result_p2 = pipe.applyRangeSeed(result_p2);
 
         }
 
-        System.out.println("result_p2 = " + result_p2);
-
-        System.out.println("result_p1 ="+array_result_p1.stream().mapToLong(RangeSeed::start).min());
-        System.out.println("result_p2 ="+result_p2.stream().mapToLong(RangeSeed::start).min());
+        System.out.println("result_p1 ="+array_result_p1.stream().mapToLong(Seed::start).min());
+        //System.out.println("result_p2 ="+result_p2.stream().mapToLong(Seed::start).min());
 
     }
 }
