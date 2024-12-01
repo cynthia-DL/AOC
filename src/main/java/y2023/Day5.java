@@ -1,11 +1,6 @@
 package y2023;
 
-import all.Utils;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-
+/*
 record Seed(long start, long end){
     static List<Seed> fromLine(String line){
         var seeds = Arrays.stream(line.split(":")[1].trim().split(" ")).mapToLong(Long::parseLong).toArray();
@@ -79,6 +74,7 @@ record Mapper(long destinationStart, long destinationEnd, long sourceStart, long
         return ranges;
     }
 }
+
 record Pipe(ArrayList<Mapper> ranges){
     static Pipe fromLines(List<String> lines){
         var ranges = new ArrayList<Mapper>();
@@ -144,8 +140,10 @@ record Pipe(ArrayList<Mapper> ranges){
         return sb.toString();
     }
 }
+ */
 public class Day5 {
     public static void main(String[] args) {
+        /*
         //var lines = Utils.listFromFile("inputs/y2023/day5_input.txt");
         var lines = Utils.listFromFile("inputs/demo.txt");
 
@@ -179,5 +177,7 @@ public class Day5 {
         System.out.println("result_p1 ="+array_result_p1.stream().mapToLong(Seed::start).min());
         //System.out.println("result_p2 ="+result_p2.stream().mapToLong(Seed::start).min());
 
+         */
+        System.out.println("To correct");
     }
 }

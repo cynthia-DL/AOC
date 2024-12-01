@@ -11,7 +11,7 @@ public class Utils {
     public static ArrayList<String> listFromFile(String path){
         var lignes = new ArrayList<String>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(path), StandardCharsets.UTF_8)) {
-            String line = null;
+            String line;
 
 
             while ((line = reader.readLine()) != null){
@@ -25,6 +25,13 @@ public class Utils {
         return lignes;
     }
 
+    public static ArrayList<String> listFromDemoFile(){
+        return listFromFile("inputs/demo.txt");
+    }
+
+    public static ArrayList<String> listForDay(int year, int day){
+        return listFromFile("inputs/y"+year+"/day"+day+"_input.txt");
+    }
     public static void writeInFile(String path, String content){
         try (BufferedWriter writer = Files.newBufferedWriter(Path.of(path), StandardCharsets.UTF_8, StandardOpenOption.CREATE , StandardOpenOption.APPEND)){
             writer.write(content);
