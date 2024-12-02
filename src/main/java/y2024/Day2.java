@@ -52,12 +52,14 @@ public class Day2 {
         //var input =  Utils.listFromDemoFile();
         var input =  Utils.listForDay(2024, 2);
         long res1 = 0L;
-        
+        long res2 = 0L;
+
         for (var report : input){
             var reportArray = Arrays.stream(report.split(" "))
                     .mapToLong(Long::valueOf)
                     .toArray();
 
+            /*
             System.out.println("______ "+ report +" ______");
             System.out.println("reportArray = " + Arrays.toString(reportArray));
             System.out.println("isIncreasing(reportArray) = " + isIncreasing(reportArray));
@@ -66,12 +68,33 @@ public class Day2 {
             System.out.println("isSafe(reportArray) = " + isSafe(reportArray));
             System.out.println("__________________________________");
 
+             */
+
             if (isSafe(reportArray)){
                 res1++;
+                res2++;
+            } else {
+                var withoutOne = new long[reportArray.length-1];
+                for (int i = 0; i < reportArray.length; i++){
+                    var shift = 0;
+                    for (int j = 0; j < withoutOne.length; j++){
+                        if(j == i){
+                           shift = 1;
+                        }
+
+                        withoutOne[j] = reportArray[j+shift];
+                    }
+
+                    if (isSafe(withoutOne)){
+                        res2++;
+                        break;
+                    }
+                }
+
             }
         }
 
         System.out.println("res1 = " + res1);
-
+        System.out.println("res2 = " + res2);
     }
 }
