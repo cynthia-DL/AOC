@@ -59,17 +59,6 @@ public class Day2 {
                     .mapToLong(Long::valueOf)
                     .toArray();
 
-            /*
-            System.out.println("______ "+ report +" ______");
-            System.out.println("reportArray = " + Arrays.toString(reportArray));
-            System.out.println("isIncreasing(reportArray) = " + isIncreasing(reportArray));
-            System.out.println("isDecreasing(reportArray) = " + isDecreasing(reportArray));
-            System.out.println("isStepOfMost3(reportArray) = " + isStepOfMost3(reportArray));
-            System.out.println("isSafe(reportArray) = " + isSafe(reportArray));
-            System.out.println("__________________________________");
-
-             */
-
             if (isSafe(reportArray)){
                 res1++;
                 res2++;
