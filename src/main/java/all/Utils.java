@@ -8,6 +8,7 @@ import java.nio.file.StandardOpenOption;
 import java.util.ArrayList;
 
 public class Utils {
+
     public static ArrayList<String> listFromFile(String path){
         var lignes = new ArrayList<String>();
         try (BufferedReader reader = Files.newBufferedReader(Path.of(path), StandardCharsets.UTF_8)) {
