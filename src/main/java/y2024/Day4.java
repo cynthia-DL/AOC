@@ -47,12 +47,12 @@ public class Day4 {
                     }
 
                     //check column
-                    if (isInGrid(grid, x, y, 1, 0)){
+                    if (isInGrid(grid, x, y, 1, 1)){
                         result += isMAS(grid.get(x+1).charAt(y), grid.get(x+2).charAt(y),grid.get(x+3).charAt(y))
                                 ? 1 : 0;
                     }
 
-                    if (isInGrid(grid, x, y, -1, 0)){
+                    if (isInGrid(grid, x, y, 0, -1)){
                         result += isMAS(grid.get(x-1).charAt(y), grid.get(x-2).charAt(y),grid.get(x-3).charAt(y))
                                 ? 1 : 0;
                     }
