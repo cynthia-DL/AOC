@@ -26,6 +26,15 @@ enum Direction {
             case LEFT -> UP;
         };
     }
+
+    public String toString(){
+        return switch (this){
+            case UP -> "^";
+            case RIGHT -> ">";
+            case DOWN -> "v";
+            case LEFT -> "<";
+        };
+    }
 }
 
 class GuardMap{
@@ -56,10 +65,16 @@ class GuardMap{
                 var current = new LongPair(i, j);
 
                 if (current.equals(position)){
-                    sb.append((char)27 + "[42m"+(char)27 + "[30m"+ 'X' +(char)27 + "[49m"+(char)27 + "[39m");
+                    sb.append((char) 27 + "[42m" + (char) 27 + "[30m")
+                            .append(direction)
+                            .append((char) 27)
+                            .append("[49m").append((char) 27)
+                            .append("[39m");
                 }
                 else if (obstacles.contains(current)) {
                     sb.append((char)27 + "[41m"+ '#' +(char)27 + "[49m");
+                } else if (visited.contains(current)){
+                    sb.append((char)27 + "[42m"+ '.' +(char)27 + "[49m");
                 } else {
                     sb.append('.');
                 }
@@ -76,7 +91,7 @@ class GuardMap{
         }
     }
 
-    public static GuardMap fromGrig(ArrayList<String> grid){
+    public static GuardMap fromGrid(ArrayList<String> grid){
         LongPair position = null;
         ArrayList<LongPair> obstacles = new ArrayList<>();
         Direction direction = null;
@@ -110,10 +125,11 @@ class GuardMap{
     }
 
     private boolean step(){
-        //System.out.println(this);
+        addVisited(position);
         var toGo = direction.add(position);
 
         if (toGo.a() < 0 || toGo.a() >= maxLine || toGo.b() < 0 || toGo.b() >= maxColumn){
+            System.out.println(this);
             return true;
         }
 
@@ -123,20 +139,22 @@ class GuardMap{
         }
 
         position = toGo;
-        addVisited(position);
         return false;
 
     }
 
     public long walk(){
-        while (!step()){
+        boolean step = step();
+        while (!step){
+            step = step();
         }
         return visited.size();
     }
 }
 public class Day6 {
     public static void main(String[] args) {
-        System.out.println("part1 = " + GuardMap.fromGrig(Utils.listForDay(2024, 6)).walk());
+        System.out.println("part1 = " + GuardMap.fromGrid(Utils.listForDay(2024, 6)).walk());
+        //System.out.println("part1 = " + GuardMap.fromGrid(Utils.listFromDemoFile()).walk());
     }
 
 }
