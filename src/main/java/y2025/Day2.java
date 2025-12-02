@@ -2,24 +2,53 @@ package y2025;
 
 import all.Utils;
 
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
+import java.util.Collection;
 
 public class Day2 {
 
-    static String compare(String s1, String s2){
-        if (s1.equals("") || s2.equals("")){
-            return "";
+    static Collection<String> incorrectInputs(String ids){
+        ArrayList<String> incorrectInputs = new ArrayList<>();
+
+        System.out.println("ids = " + ids);
+        System.out.println("ids.lengh = " + ids.length());
+
+        for (int i = 0; i < ids.length(); i++){
+            //System.out.println("i = " + i);
+            for (int l = i+1; l <= ids.length(); l++) {
+                //System.out.println("l = " + l);
+                String substring = ids.substring(i, l);
+                //System.out.println("substring = " + substring);
+                String longuest = "";
+
+
+                for (int j = l+1; j <= ids.length()+1; j++) {
+                    for (int k = j + 1; k <= ids.length(); k++) {
+                        String toCompare = ids.substring(j, k);
+                        System.out.printf("i = %d, l = %d __ j = %d, k = %d substring = %s, toCompare = %s%n", i, l, j, k, substring, toCompare);
+
+                        /*
+                        if (substring.equals(toCompare) && longuest.length() < toCompare.length()) {
+                            longuest = substring + toCompare;
+                            System.out.println("longuest = " + longuest);
+                        }
+
+                         */
+                    }
+                }
+
+                if (!incorrectInputs.isEmpty() && longuest.length() > incorrectInputs.get(0).length()) {
+                    incorrectInputs = new ArrayList<>();
+                }
+
+                if (incorrectInputs.isEmpty() || (longuest.length() == incorrectInputs.get(0).length() && !incorrectInputs.contains(longuest))) {
+                    incorrectInputs.add(longuest);
+                }
+            }
         }
 
-        if (s1.equals(s2)){
-            return s1;
-        }
-
-        int half = s1.length()/2;
-
-        String o = compare(s1.substring(0, half-1), s1.substring(half));
-
+        return incorrectInputs;
     }
 
     public static void main(String[] args) {
@@ -35,6 +64,10 @@ public class Day2 {
             String tmp = ids.replaceAll("-", "");
             if (tmp.length() % 2 != 0) continue;
 
+            System.out.println("incorrectInputs("+tmp+") = " + incorrectInputs(tmp));
         }
+        
+        
+
     }
 }
