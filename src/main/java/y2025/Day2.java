@@ -4,7 +4,9 @@ import all.Utils;
 import kotlin.Pair;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 public class Day2 {
@@ -28,7 +30,7 @@ public class Day2 {
             return new IdFinder(ranges);
         }
 
-        public BigInteger process(){
+        public BigInteger process1(){
             BigInteger sum = BigInteger.ZERO;
 
             for (var range : ranges){
@@ -54,14 +56,56 @@ public class Day2 {
             return sum;
         }
 
+        public BigInteger process2(){
+            BigInteger sum = BigInteger.ZERO;
+
+            for (var range : ranges){
+                // for i = firstId ; i <= lastId; i++
+                for (BigInteger i = range.component1(); i.compareTo(range.component2()) <= 0; i = i.add(BigInteger.ONE)){
+                    int numberSize = i.toString().length()/2;
+                    for (int j = 1; j < numberSize/2; j++){
+                        if (numberSize%j != 0){
+                            break;
+                        }
+
+                        var list = chop(i.toString(), j);
+                        var withness = list.get(0);
+                        for (var chunk: list){
+                            if (!chunk.equals(withness)) continue;
+                        }
+
+                        sum = sum.add(i);
+                        System.out.println(i);
+
+                    }
+                }
+            }
+
+            return sum;
+        }
+
+        private List<String> chop(String input, int chunkSize){
+            var result = new ArrayList<String>(input.length()%chunkSize);
+            var charSequence = input.toCharArray();
+            for (int i = 0; i < input.length(); i+=chunkSize){
+                String tmp = "";
+                for (int j = 0; j < chunkSize; j++){
+                    tmp = tmp+charSequence[i+j];
+                }
+                result.add(tmp);
+            }
+            return result;
+        }
+
     }
 
 
     public static void main(String[] args) {
-        var input = Utils.listForDay(2025, 2).get(0);
-        //var input = Utils.listFromDemoFile().get(0);
+        //var input = Utils.listForDay(2025, 2).get(0);
+        var input = Utils.listFromDemoFile().get(0);
         var idFinder = IdFinder.fromInput(input);
 
-        System.out.println("idFinder.process() = " + idFinder.process());
+        //System.out.println("idFinder.process1() = " + idFinder.process1());
+        System.out.println("idFinder.process2() = " + idFinder.process2());
     }
 }
