@@ -1,73 +1,67 @@
 package y2025;
 
 import all.Utils;
+import kotlin.Pair;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collection;
+import java.math.BigInteger;
+import java.util.HashSet;
+import java.util.Set;
 
 public class Day2 {
 
-    static Collection<String> incorrectInputs(String ids){
-        ArrayList<String> incorrectInputs = new ArrayList<>();
+    static class IdFinder{
+        private final Set<Pair<BigInteger, BigInteger>> ranges;
 
-        System.out.println("ids = " + ids);
-        System.out.println("ids.lengh = " + ids.length());
+        private IdFinder(Set<Pair<BigInteger, BigInteger>> ranges){
+            this.ranges = ranges;
+        }
 
-        for (int i = 0; i < ids.length(); i++){
-            //System.out.println("i = " + i);
-            for (int l = i+1; l <= ids.length(); l++) {
-                //System.out.println("l = " + l);
-                String substring = ids.substring(i, l);
-                //System.out.println("substring = " + substring);
-                String longuest = "";
+        static IdFinder fromInput(String input){
+            var ranges = new HashSet<Pair<BigInteger, BigInteger>>();
+            var parts = input.split(",");
+            for (String line: parts){
+                var splited = line.strip().split("-");
+                ranges.add(new Pair<>(new BigInteger(splited[0]), new BigInteger(splited[1])));
 
+            }
 
-                for (int j = l+1; j <= ids.length()+1; j++) {
-                    for (int k = j + 1; k <= ids.length(); k++) {
-                        String toCompare = ids.substring(j, k);
-                        System.out.printf("i = %d, l = %d __ j = %d, k = %d substring = %s, toCompare = %s%n", i, l, j, k, substring, toCompare);
+            return new IdFinder(ranges);
+        }
 
-                        /*
-                        if (substring.equals(toCompare) && longuest.length() < toCompare.length()) {
-                            longuest = substring + toCompare;
-                            System.out.println("longuest = " + longuest);
-                        }
+        public BigInteger process(){
+            BigInteger sum = BigInteger.ZERO;
 
-                         */
+            for (var range : ranges){
+                // for i = firstId ; i <= lastId; i++
+                ///  oui je sais c'est vénère de fou mais tkt
+                for (BigInteger i = range.component1(); i.compareTo(range.component2()) <= 0; i = i.add(BigInteger.ONE)){
+                    if (i.toString().length() % 2 != 0){
+                        continue; //don't compute if we can't make double sequences
+                    }
+
+                    String toString = i.toString();
+
+                    String subPart1 = toString.substring(0, toString.length()/2);
+                    String subPart2 = toString.substring(toString.length()/2);
+
+                    if(subPart1.equals(subPart2)) {
+                        sum = sum.add(i);
+                        System.out.println(i);
                     }
                 }
-
-                if (!incorrectInputs.isEmpty() && longuest.length() > incorrectInputs.get(0).length()) {
-                    incorrectInputs = new ArrayList<>();
-                }
-
-                if (incorrectInputs.isEmpty() || (longuest.length() == incorrectInputs.get(0).length() && !incorrectInputs.contains(longuest))) {
-                    incorrectInputs.add(longuest);
-                }
             }
+
+            return sum;
         }
 
-        return incorrectInputs;
     }
 
+
     public static void main(String[] args) {
-        String line = Utils.listFromDemoFile().get(0);
-        String [] inputs = line.strip().split(",");
-        System.out.println("inputs = " + Arrays.deepToString(inputs));
+        var input = Utils.listForDay(2025, 2).get(0);
+        //var input = Utils.listFromDemoFile().get(0);
+        var idFinder = IdFinder.fromInput(input);
 
-        String result = "";
-
-        for (String ids: inputs){
-            if(ids.charAt(0) == '0') continue;
-
-            String tmp = ids.replaceAll("-", "");
-            if (tmp.length() % 2 != 0) continue;
-
-            System.out.println("incorrectInputs("+tmp+") = " + incorrectInputs(tmp));
-        }
-        
-        
-
+        System.out.println("idFinder.process() = " + idFinder.process());
     }
 }
