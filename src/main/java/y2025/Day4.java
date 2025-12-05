@@ -2,8 +2,12 @@ package y2025;
 
 import all.AbstractGrid;
 import all.Utils;
+import kotlin.Pair;
 
+import java.awt.*;
 import java.math.BigInteger;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 class Grid extends AbstractGrid<Boolean> {
@@ -50,7 +54,15 @@ class Grid extends AbstractGrid<Boolean> {
         return surounding <= 4;
     }
 
+    public boolean hasAccessible(){
+        for (int i = 0; i < height(); i++){
+            for (int j = 0; j < width(); j++){
+                if (isAccessible(i, j)) return true;
+            }
+        }
 
+        return false;
+    }
 
     @Override
     public String toString() {
@@ -69,22 +81,59 @@ class Grid extends AbstractGrid<Boolean> {
 }
 
 public class Day4 {
-    public static void main(String[] args) {
-        //List<String> inputs = Utils.listForDay(2025, 4);
-        List<String> inputs = Utils.listFromDemoFile();
+    public static int part1(List<String> inputs){
         var grid = Grid.fill(inputs);
 
         System.out.println(grid);
 
-        BigInteger sum = BigInteger.ZERO;
+        List<Pair<Integer, Integer>> accessible = new ArrayList<>();
         for (int i = 0; i < grid.height(); i++){
             for (int j = 0; j < grid.width(); j++){
                 if (grid.isAccessible(i, j)){
-                    sum = sum.add(BigInteger.ONE);
-                } 
+                    accessible.add(new Pair<>(i, j));
+                }
             }
         }
 
-        System.out.println("sum = " + sum);
+        return accessible.size();        
+    }
+
+    public static BigInteger part2(List<String> inputs){
+        var grid = Grid.fill(inputs);
+
+        System.out.println(grid);
+
+        List<Pair<Integer, Integer>> accessible = new ArrayList<>();
+        BigInteger removed = BigInteger.ZERO;
+
+        while (grid.hasAccessible()) {
+            for (int i = 0; i < grid.height(); i++) {
+                for (int j = 0; j < grid.width(); j++) {
+                    if (grid.isAccessible(i, j)) {
+                        accessible.add(new Pair<>(i, j));
+                    }
+                }
+            }
+
+            removed = removed.add(new BigInteger(String.valueOf(accessible.size())));
+            for (var pair : accessible){
+                grid.remove(pair.component1(), pair.component2());
+            }
+
+            accessible = Collections.emptyList();
+
+        }
+
+        return removed;
+    }
+
+    
+    public static void main(String[] args) {
+        //List<String> inputs = Utils.listForDay(2025, 4);
+        List<String> inputs = Utils.listFromDemoFile();
+
+        System.out.println(" part1(inputs) = " +  part1(inputs));
+        System.out.println(" part2(inputs) = " +  part2(inputs));
+
     }
 }

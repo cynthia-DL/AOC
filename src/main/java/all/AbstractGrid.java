@@ -18,7 +18,7 @@ public abstract class AbstractGrid<T> {
         }
     }
 
-    protected boolean isPresent(int line, int column) {
+    protected boolean isValid(int line, int column) {
         if (line < 0 || line >= width) {
             return false;
         }
@@ -31,16 +31,32 @@ public abstract class AbstractGrid<T> {
     }
 
     public void set(int line, int column, T item) {
-        if (!isPresent(line, column)) return;
+        if (!isValid(line, column)) return;
 
         this.internal.get(line).set(column, item);
 
     }
 
     public T get(int line, int column) {
-        if (!isPresent(line, column)) return null;
+        if (!isValid(line, column)) return null;
 
         return internal.get(line).get(column);
+    }
+
+    public void remove(int line, int column){
+        if (!isValid(line, column)) return;
+
+        internal.get(line).set(column, null);
+    }
+
+    public boolean isEmpty(){
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
+                if(get(i, j) != null) return false;
+            }
+        }
+
+        return true;
     }
 
     public int height() {
@@ -53,5 +69,19 @@ public abstract class AbstractGrid<T> {
 
     protected List<List<T>> internal(){
         return this.internal;
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+
+        for (int i = 0; i < height; i++){
+            for (int j = 0; j < width; j++){
+                if(!isValid(i, j)) sb.append(' ');
+                else sb.append(get(i, j));
+            }
+        }
+
+        return sb.toString();
     }
 }
