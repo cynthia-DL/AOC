@@ -84,8 +84,6 @@ public class Day4 {
     public static int part1(List<String> inputs){
         var grid = Grid.fill(inputs);
 
-        System.out.println(grid);
-
         List<Pair<Integer, Integer>> accessible = new ArrayList<>();
         for (int i = 0; i < grid.height(); i++){
             for (int j = 0; j < grid.width(); j++){
@@ -100,16 +98,13 @@ public class Day4 {
 
     public static BigInteger part2(List<String> inputs){
         var grid = Grid.fill(inputs);
-
-        System.out.println(grid);
-
         List<Pair<Integer, Integer>> accessible = new ArrayList<>();
         BigInteger removed = BigInteger.ZERO;
 
         while (grid.hasAccessible()) {
-            for (int i = 0; i < grid.height(); i++) {
-                for (int j = 0; j < grid.width(); j++) {
-                    if (grid.isAccessible(i, j)) {
+            for (int i = 0; i < grid.height(); i++){
+                for (int j = 0; j < grid.width(); j++){
+                    if (grid.isAccessible(i, j)){
                         accessible.add(new Pair<>(i, j));
                     }
                 }
@@ -120,7 +115,7 @@ public class Day4 {
                 grid.remove(pair.component1(), pair.component2());
             }
 
-            accessible = Collections.emptyList();
+            accessible = new ArrayList<>();
 
         }
 
@@ -129,11 +124,9 @@ public class Day4 {
 
     
     public static void main(String[] args) {
-        //List<String> inputs = Utils.listForDay(2025, 4);
-        List<String> inputs = Utils.listFromDemoFile();
+        List<String> inputs = Utils.listForDay(2025, 4);
 
         System.out.println(" part1(inputs) = " +  part1(inputs));
         System.out.println(" part2(inputs) = " +  part2(inputs));
-
     }
 }
