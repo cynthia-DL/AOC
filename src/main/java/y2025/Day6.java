@@ -13,7 +13,7 @@ public class Day6 {
         final List<BigInteger> values = new ArrayList<>();
         Operator operator;
 
-        public BigInteger processPart1(){
+        public BigInteger process(){
             BigInteger result = operator == Operator.ADD ? BigInteger.ZERO : BigInteger.ONE;
 
             for (var component : values){
@@ -50,9 +50,66 @@ public class Day6 {
             return homework;
         }
 
+        public static List<MathProblem> getHomeworkButRightThisTime(List<String> input){
+            List<MathProblem> result = new ArrayList<>();
+
+            final int MAX_LINE = input.size();
+            final int MAX_COLUMN = input.stream().mapToInt(String::length).max().getAsInt();
+            System.out.println("MAX_COLUMN = " + MAX_COLUMN);
+            System.out.println("MAX_LINE = " + MAX_LINE);
+            
+            boolean newProblem = true;
+            int homeworkInList = 0;
+            List<BigInteger> values = new ArrayList<>();
+            String sign = "";
+
+            for (int i = 0; i <= MAX_COLUMN; i++ ){
+                StringBuilder construct = new StringBuilder();
+                for (int j = 0; j < MAX_LINE; j++){
+                    char tmp;
+                    try {
+                        tmp = input.get(j).charAt(i);
+                    } catch (Exception e){
+                        tmp = ' ';
+                    }
+                    if (tmp == ' ') continue;
+
+                    newProblem = false;
+                    if (tmp == '+' || tmp == '*'){
+                        sign = String.valueOf(Character.valueOf(tmp));
+                        continue;
+                    }
+
+                    construct.append(tmp);
+
+                }
+
+                if(!construct.toString().isEmpty()){
+                    values.add(new BigInteger(construct.toString()));
+                }
+
+                if (newProblem){
+                    var math = new MathProblem();
+                    math.values.addAll(values);
+                    math.operator = Operator.fromSign(sign);
+                    result.add(math);
+                    System.out.println(math);
+                    values = new ArrayList<>();
+                    sign = "";
+                    homeworkInList++;
+                }
+
+                newProblem = true;
+            }
+
+            return result;
+
+
+        }
+
         @Override
         public String toString() {
-            return operator + "->" + values;
+            return "" +operator + values + " = " + process();
         }
 
         enum Operator {
@@ -85,12 +142,21 @@ public class Day6 {
         //var input = Utils.listFromDemoFile();
         var input = Utils.listForDay(2025, 6);
 
-        var resultp1 =MathProblem.getHomework(input)
+        var result1 =
+                MathProblem
+                .getHomework(input)
                 .stream()
-                .map(MathProblem::processPart1)
+                .map(MathProblem::process)
                 .reduce(BigInteger.ZERO, BigInteger::add);
 
-        System.out.println(resultp1);
+        var result2 =
+                MathProblem
+                .getHomeworkButRightThisTime(input)
+                .stream()
+                .map(MathProblem::process)
+                .reduce(BigInteger.ZERO, BigInteger::add);
 
+        System.out.println(result1);
+        System.out.println(result2);
     }
 }
