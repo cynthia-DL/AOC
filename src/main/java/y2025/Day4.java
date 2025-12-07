@@ -7,7 +7,6 @@ import kotlin.Pair;
 import java.awt.*;
 import java.math.BigInteger;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 class Grid extends AbstractGrid<Boolean> {

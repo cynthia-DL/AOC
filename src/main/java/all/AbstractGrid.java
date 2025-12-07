@@ -77,8 +77,7 @@ public abstract class AbstractGrid<T> {
 
         for (int i = 0; i < height; i++){
             for (int j = 0; j < width; j++){
-                if(!isValid(i, j)) sb.append(' ');
-                else sb.append(get(i, j));
+                sb.append(get(i, j));
             }
         }
 
