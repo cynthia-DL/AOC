@@ -89,9 +89,21 @@ public class Day8 {
                 }
             }
 
+            //check if all of the points closest to "closest" are also closest to current point
+            boolean shouldBeAdded = map.get(currentPoint).isEmpty();
             var arrayList = map.get(closest);
-            arrayList.add(currentPoint);
-            map.put(currentPoint, arrayList);
+            for (var point: arrayList){
+                if(!shouldBeAdded && (closest.distance(point).compareTo(closest.distance(currentPoint)) != 0)){
+                    map.get(currentPoint).add(currentPoint);
+                    map.get(currentPoint).add(closest);
+                    shouldBeAdded = true;
+                }
+            }
+
+            if(shouldBeAdded) {
+                arrayList.add(currentPoint);
+                map.put(currentPoint, arrayList);
+            }
         }
 
         //System.out.println(map);
