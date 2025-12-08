@@ -13,21 +13,16 @@ public abstract class AbstractGrid<T> {
         this.width = width;
         this.internal = new ArrayList<>();
 
-        for (int i = 0; i < this.height; i++) {
-            internal.add(new ArrayList<>());
+        for (int i = 0; i < height; i++) {
+            internal.add(new ArrayList<>(width));
         }
     }
 
     protected boolean isValid(int line, int column) {
-        if (line < 0 || line >= width) {
-            return false;
-        }
-
-        if (column < 0 || column >= height) {
-            return false;
-        }
-
-        return true;
+        return line >= 0
+                && column >= 0
+                && line < height
+                && column < width;
     }
 
     public void set(int line, int column, T item) {

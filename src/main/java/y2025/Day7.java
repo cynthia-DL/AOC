@@ -2,10 +2,10 @@ package y2025;
 
 import all.AbstractGrid;
 import all.Utils;
-import kotlin.Pair;
+import kotlin.collections.EmptySet;
 
-import java.awt.*;
-import java.math.BigInteger;
+import java.awt.Point;
+import java.util.Arrays;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -43,43 +43,49 @@ public class Day7 {
         }
 
         public long getBeams(){
-            Set<Point> visited = new HashSet<>();
-            getBeams(0, start, visited);
+            boolean[] beams = new boolean[width()];
 
-            visited.stream()
-                    .distinct()
-                    .count();
+            beams[start] = true;
 
-            return                     visited.stream()
-                    .distinct()
-                    .count();
-        }
+            var sb = new StringBuilder();
 
-        private void getBeams(int line, int column, Set<Point> visited){
-            System.out.println(String.format("getBeam(%d, %d)", line, column));
-            if (line == height() -1){
-                return;
+            for (int i = 0; i < height(); i++){
+                for (int j = 0; j < width(); j++){
+                    Boolean isSplitter = get(i, j);
+                    if(isSplitter != null && isSplitter){
+                        beams[j] = false;
+                        if (j-1 >= 0) beams[j-1] = true;
+                        if (j+1 < width()) beams[j+1] = true;
+                    }
+                }
+
+                for (var beam: beams)
+                   sb.append(beam ? '|' : '.');
+                sb.append('\n');
             }
 
-            visited.add(new Point(line, column));
-            if(get(line, column)){
-                getBeams(line+1, column-1, visited);
-                getBeams(line+1, column+1, visited);
+
+            long sum = 0;
+            for (var beam:beams){
+                sum += beam ? 1 : 0;
             }
 
-            getBeams(line+1, column, visited);
+            return sum;
         }
 
         @Override
-        public String toString() {
+        public String toString(){
+            return toString(EmptySet.INSTANCE);
+        }
+
+        public String toString(Set<Point> splitted) {
             StringBuilder sb = new StringBuilder();
-            for (int i = 0; i < height(); i++){
+            for (int i = 0; i < internal().size(); i++){
                 for (int j = 0; j < width(); j++){
-                    if (isValid(i, j)){
-                        if(i == 0 && j == start) sb.append('S');
-                        else if(get(i,j)) sb.append('^');
-                        else sb.append('.');
-                    }
+                    if(i == 0 && j == start) sb.append('S');
+                    else if(!splitted.isEmpty() && splitted.contains(new Point(i, j))) sb.append('^');
+                    else if(splitted.isEmpty() && get(i,j)) sb.append('^');
+                    else sb.append('.');
                 }
                 sb.append('\n');
             }
@@ -91,9 +97,9 @@ public class Day7 {
 
     public static void main(String[] args) {
         var input = Utils.listFromDemoFile();
+        //var input = Utils.listForDay(2025, 7);
         var grid = TachyonManifold.fromFile(input);
 
-        System.out.println(grid);
         System.out.println("grid.getBeams() = " + grid.getBeams());
     }
 }
