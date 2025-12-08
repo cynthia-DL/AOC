@@ -94,8 +94,8 @@ public class Day8 {
         //System.out.println(map);
         var sums = map.values()
             .stream()
-            .map(List::size)
             .distinct()
+            .map(List::size)
             .sorted(Comparator.reverseOrder())
             .toList();
 
