@@ -3,10 +3,7 @@ package y2025;
 import all.Utils;
 
 import java.math.BigInteger;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class Day8 {
     static class BigInteger3DPoint{
@@ -89,35 +86,22 @@ public class Day8 {
                 }
             }
 
-            //check if all of the points closest to "closest" are also closest to current point
-            boolean shouldBeAdded = map.get(currentPoint).isEmpty();
             var arrayList = map.get(closest);
-            for (var point: arrayList){
-                if(!shouldBeAdded && (closest.distance(point).compareTo(closest.distance(currentPoint)) != 0)){
-                    map.get(currentPoint).add(currentPoint);
-                    map.get(currentPoint).add(closest);
-                    shouldBeAdded = true;
-                }
-            }
-
-            if(shouldBeAdded) {
-                arrayList.add(currentPoint);
-                map.put(currentPoint, arrayList);
-            }
+            arrayList.add(currentPoint);
+            map.put(currentPoint, arrayList);
         }
 
         //System.out.println(map);
+        var sums = map.values()
+            .stream()
+            .map(List::size)
+            .distinct()
+            .sorted(Comparator.reverseOrder())
+            .toList();
 
+        System.out.println(sums);
 
-        return BigInteger.valueOf(
-                map.values()
-                        .stream()
-                        .distinct()
-                        .peek(System.out::println)
-                        .mapToLong(List::size)
-                        .reduce((l, l1) -> l*l1)
-                        .getAsLong()
-        );
+        return new BigInteger(String.valueOf(sums.get(0)*sums.get(1)*sums.get(2)));
     }
 
     public static void main(String[] args) {
