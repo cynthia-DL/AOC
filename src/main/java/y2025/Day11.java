@@ -1,14 +1,12 @@
 package y2025;
 
-import all.LongPair;
 import all.Utils;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 
-public class Day10 {
+public class Day11 {
     record Node(String name, List<Node> output){
         public static Node fromInput(List<String> input){
             var allNodes = new HashMap<String, Node>();
