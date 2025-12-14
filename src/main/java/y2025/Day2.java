@@ -62,22 +62,29 @@ public class Day2 {
             for (var range : ranges){
                 // for i = firstId ; i <= lastId; i++
                 for (BigInteger i = range.component1(); i.compareTo(range.component2()) <= 0; i = i.add(BigInteger.ONE)){
-                    int numberSize = i.toString().length()/2;
-                    for (int j = 1; j < numberSize/2; j++){
+                    var toAdd = new HashSet<BigInteger>();
+                    int numberSize = i.toString().length();
+                    for (int j = 1; j <= numberSize/2; j++){
                         if (numberSize%j != 0){
-                            break;
+                            continue;
                         }
 
                         var list = chop(i.toString(), j);
-                        var withness = list.get(0);
-                        for (var chunk: list){
-                            if (!chunk.equals(withness)) continue;
+                        var withness = list.remove(0);
+                        boolean repeats = true;
+                        for (String s : list) {
+                            if (!s.equals(withness)) {
+                                repeats = false;
+                                break;
+                            }
                         }
 
-                        sum = sum.add(i);
-                        System.out.println(i);
-
+                        if (repeats) {
+                            toAdd.add(i);
+                        }
                     }
+                    var all = toAdd.stream().reduce(BigInteger.ZERO, BigInteger::add);
+                    sum = sum.add(all);
                 }
             }
 
@@ -85,14 +92,9 @@ public class Day2 {
         }
 
         private List<String> chop(String input, int chunkSize){
-            var result = new ArrayList<String>(input.length()%chunkSize);
-            var charSequence = input.toCharArray();
+            var result = new ArrayList<String>();
             for (int i = 0; i < input.length(); i+=chunkSize){
-                String tmp = "";
-                for (int j = 0; j < chunkSize; j++){
-                    tmp = tmp+charSequence[i+j];
-                }
-                result.add(tmp);
+                result.add(input.substring(i, i+chunkSize));
             }
             return result;
         }
@@ -101,11 +103,11 @@ public class Day2 {
 
 
     public static void main(String[] args) {
-        //var input = Utils.listForDay(2025, 2).get(0);
-        var input = Utils.listFromDemoFile().get(0);
+        var input = Utils.listForDay(2025, 2).get(0);
+        //var input = Utils.listFromDemoFile().get(0);
         var idFinder = IdFinder.fromInput(input);
 
-        //System.out.println("idFinder.process1() = " + idFinder.process1());
+        System.out.println("idFinder.process1() = " + idFinder.process1());
         System.out.println("idFinder.process2() = " + idFinder.process2());
     }
 }
